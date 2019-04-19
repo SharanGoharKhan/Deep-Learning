@@ -100,15 +100,15 @@ def train_dv_without_pca_gp(seed_value):
                 difficult_points[q_ind].append(n_ind)
 
     # Hard to evolve points
-    hard_to_evolve_x = X_train_pca[difficult_points[0]]
+    hard_to_evolve_x = X_train[difficult_points[0]]
     hard_to_evolve_y = y_train[difficult_points[0]]
 
     # Medium to evolve points
-    medium_to_evolve_x = X_train_pca[difficult_points[1]]
+    medium_to_evolve_x = X_train[difficult_points[1]]
     medium_to_evolve_y = y_train[difficult_points[1]]
 
     # Easy to evolve points
-    easy_to_evolve_x = X_train_pca[difficult_points[2]]
+    easy_to_evolve_x = X_train[difficult_points[2]]
     easy_to_evolve_y = y_train[difficult_points[2]]
 
     # Training the system
@@ -132,8 +132,9 @@ def train_dv_without_pca_gp(seed_value):
     # list_of_est_program.append(str(est_gp._program))
 
     # Use the converted pca test set
-    x0 = X_test_pca[:,0]
-    predicted_formula_result_y = est_gp.predict(np.c_[x0.ravel()]).reshape(x0.shape)
+    x0 = X_test[:,0]
+    x1 = X_test[:,1]
+    predicted_formula_result_y = est_gp.predict(np.c_[x0.ravel(), x1.ravel()]).reshape(x0.shape)
     fitness = mean_squared_error(y_test, predicted_formula_result_y)
     print('Final Fitness: ',str(fitness))
 
@@ -251,6 +252,9 @@ def run_std_gp():
     for itr in range(0,NUMBER_OF_RUNS):
         train_std_gp(itr)
 
+def run_dv_without_pca_gp():
+    for itr in range(0,NUMBER_OF_RUNS):
+        train_dv_without_pca_gp(itr)
 def run_pca_gp():
     for itr in range(0,NUMBER_OF_RUNS):
         train_pca_gp(itr)
@@ -295,7 +299,7 @@ def transform_to_array(data):
 def get_fitness_each_gen():
     run_results = {}
     generation_results = []
-    f = open("DV_GP_output_F2.txt","r")
+    f = open("DV_without_PCA_F2.txt","r")
     fl =f.readlines()
     read_fitness_in_next_line = False
     run_number = 0
@@ -344,6 +348,7 @@ def get_fitness_each_gen_dv():
     return
     # return run_results
 def main():
+    # run_dv_without_pca_gp()
     # run_dv_gp()
     result = get_fitness_each_gen()
     transformed_result = transform_result(result)
