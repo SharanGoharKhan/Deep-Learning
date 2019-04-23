@@ -10,7 +10,7 @@ from sklearn.decomposition import PCA
 import math
 
 # Global Variables
-FEATURES = 2
+FEATURES = 6
 NUMBER_OF_GENERATION = 20
 ROWS = 300
 POPULATION_SIZE = 400
@@ -19,7 +19,15 @@ NUMBER_OF_REGIONS = 3
 # Equation 1
 # formula = lambda X: X[:, 0]**2 - X[:, 1]**2 + X[:, 1] - 1 
 # Equation 2
-formula = lambda X: 0.3 * X[:,0] * np.sin(2*math.pi*X[:,1])
+# formula = lambda X: 0.3 * X[:,0] * np.sin(2*math.pi*X[:,1])
+# Equation 3
+# formula = lambda X: X[:,0]**4 - X[:,0]**3 + 0.5*X[:,1]**2 - X[:,1]
+# Equation 4
+# formula = lambda X: 8/(2 + X[:,0]**2 + X[:,1]**2)
+# Equation 5
+# formula = lambda X: X[:,0]*X[:,1] + X[:,2]*X[:,3] + X[:,4]*X[:,5] + X[:,0]*X[:,6]*X[:,7] + X[:,2]*X[:,5]*X[:,8]
+# Equation 6
+formula = lambda X: 10 * np.sin(math.pi*X[:,0]*X[:,1]) + 20*  (X[:,3]-.5)**2 + 10*X[:,4] + 5*X[:,5]
 NUMBER_OF_RUNS = 30
 
 def train_pca_gp(seed_value):
@@ -156,11 +164,11 @@ def train_std_gp(seed_value):
                             max_samples=0.9, verbose=1,
                             parsimony_coefficient=0.01, random_state=0)
     est_gp.fit(X_train,y_train)
-    x0 = X_test[:,0]
-    x1 = X_test[:,1]
-    predicted_formula_result_y = est_gp.predict(np.c_[x0.ravel(), x1.ravel()]).reshape(x0.shape)
-    fitness = mean_squared_error(y_test, predicted_formula_result_y)
-    print('Final Fitness: ',str(fitness))
+    # x0 = X_test[:,0]
+    # x1 = X_test[:,1]
+    # predicted_formula_result_y = est_gp.predict(np.c_[x0.ravel(), x1.ravel()]).reshape(x0.shape)
+    # fitness = mean_squared_error(y_test, predicted_formula_result_y)
+    print('Final Fitness: ')
 
 def train_dv_gp(seed_value):
 
@@ -299,7 +307,7 @@ def transform_to_array(data):
 def get_fitness_each_gen():
     run_results = {}
     generation_results = []
-    f = open("DV_without_PCA_F2.txt","r")
+    f = open("ST_GP_output_F6.txt","r")
     fl =f.readlines()
     read_fitness_in_next_line = False
     run_number = 0
@@ -348,8 +356,8 @@ def get_fitness_each_gen_dv():
     return
     # return run_results
 def main():
-    # run_dv_without_pca_gp()
-    # run_dv_gp()
+    # run_std_gp()
+    # run_pca_gp()
     result = get_fitness_each_gen()
     transformed_result = transform_result(result)
     transform_to_array(transformed_result)
