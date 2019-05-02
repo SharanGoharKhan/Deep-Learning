@@ -168,27 +168,24 @@ def dv_gp(rows,features,function):
         cur_region = 0
         # Run the while loop till number of generations or till all the regions stagnate
         while len(generation_results) < NUMBER_OF_GENERATION:
-            if cur_region < regions:
-                # Check Stagnation
-                # Take the average of last 5 generation fitness if its less the current stagnation is declared
-                if is_stagnation(generation_results,est_gp._programs):
-                    cur_region += 1
-                    if cur_region == 1:
+            # Check Stagnation
+            # Take the average of last 5 generation fitness if its less the current stagnation is declared
+            if is_stagnation(generation_results,est_gp._programs):
+                cur_region += 1
+                if cur_region == 1:
 
-                        # Feed to model medium to evolve points
-                        curr_data_x = medium_to_evolve_x
-                        curr_data_y = medium_to_evolve_y
-                        rerun_model(est_gp,curr_data_x,curr_data_y,generation_results)
-                    elif cur_region == 2:
+                    # Feed to model medium to evolve points
+                    curr_data_x = medium_to_evolve_x
+                    curr_data_y = medium_to_evolve_y
+                    rerun_model(est_gp,curr_data_x,curr_data_y,generation_results)
+                elif cur_region >= 2:
 
-                        # Feed to model Easy to evolve points
-                        curr_data_x = easy_to_evolve_x
-                        curr_data_y = easy_to_evolve_y
-                        rerun_model(est_gp,curr_data_x,curr_data_y,generation_results)
-                else:
+                    # Feed to model Easy to evolve points
+                    curr_data_x = easy_to_evolve_x
+                    curr_data_y = easy_to_evolve_y
                     rerun_model(est_gp,curr_data_x,curr_data_y,generation_results)
             else:
-                break
+                rerun_model(est_gp,curr_data_x,curr_data_y,generation_results)
         run_results[run_number] = generation_results
     return run_results
 
@@ -260,7 +257,7 @@ def std_gp(rows,features,function):
     return run_results
 
 def main():
-        methods = ['Standard GP','PCA GP','DV GP']
+        methods = ['DV GP']
         runs_data = [
             [
                 { 'FUNCTION': lambda X: X[:, 0]**2 - X[:, 1]**2 + X[:, 1] - 1 },
@@ -284,7 +281,7 @@ def main():
                 { 'FUNCTION': lambda X: 8/(2 + X[:,0]**2 + X[:,1]**2) },
                 { 'FEATURES': 2 },
                 { 'ROWS': 400 },
-                { 'TITLE': lambda title,eqn:  title + ' Equation  ' + str(eqn)+ ' ' + str(NUMBER_OF_RUNS) }
+                { 'TITLE': lambda title,eqn:  title + ' Equation ' + str(eqn)+ ' Total Runs ' + str(NUMBER_OF_RUNS) }
             ],
             [
                 { 'FUNCTION': lambda X: X[:,0]*X[:,1] + X[:,2]*X[:,3] + X[:,4]*X[:,5] + X[:,0]*X[:,6]*X[:,7] + X[:,2]*X[:,5]*X[:,8] },
