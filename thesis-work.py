@@ -257,7 +257,7 @@ def std_gp(rows,features,function):
     return run_results
 
 def main():
-        methods = ['DV GP']
+        methods = ['Standard GP','PCA GP','DV GP']
         runs_data = [
             [
                 { 'FUNCTION': lambda X: X[:, 0]**2 - X[:, 1]**2 + X[:, 1] - 1 },
